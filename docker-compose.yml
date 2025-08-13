@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  # frontend-service:
+  #   build: ./frontend-service
+  #   ports:
+  #     - "8000:8000"
+
+  # file-service:
+  #   build: ./file-service
+  #   ports:
+  #     - "8001:8001"
+
+   python-service:
+        build: ./python-service
+        ports:
+          - "9002:9002"
+
+   api-gateway:
+         build: ./api-gateway
+         volumes:
+            -  ./frontend-service/index.html:/app/index.html
+         ports:
+           - "8000:8000"       
+          
+       
+
+  
