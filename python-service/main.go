@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
-	"os"
 	"os/exec"
 )
 
@@ -23,13 +23,15 @@ func run(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-   errors  := os.WriteFile("code.py",[]byte(d.Code),os.ModePerm)
 
-   if errors != nil {
-	 fmt.Println("Cannot write in the file",errors)
-   }
-   
-   cmd := exec.Command("python3","code.py")
+   cmd := exec.Command("python3","-")
+
+   stdin,_:= cmd.StdinPipe()
+
+   func () {
+        defer stdin.Close()
+		io.WriteString(stdin,d.Code)
+   }()
 
 
    output,err := cmd.CombinedOutput()
